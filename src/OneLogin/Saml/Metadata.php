@@ -31,6 +31,22 @@ class OneLogin_Saml_Metadata
     public function getXml()
     {
         $validUntil = $this->_getMetadataValidTimestamp();
+$keyDescriptor = <<<KEY_DESCRIPTOR
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{$this->_settings->idpPublicCertificate}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{$this->_settings->idpPublicCertificate}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+KEY_DESCRIPTOR;
 
         return <<<METADATA_TEMPLATE
 <?xml version="1.0"?>
@@ -42,6 +58,7 @@ class OneLogin_Saml_Metadata
         <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
                                      Location="{$this->_settings->spReturnUrl}"
                                      index="1"/>
+{$keyDescriptor}
     </md:SPSSODescriptor>
 </md:EntityDescriptor>
 METADATA_TEMPLATE;
