@@ -114,7 +114,14 @@ class OneLogin_Saml_Response
         }
         $id = substr($assertionReferenceNode->attributes->getNamedItem('URI')->nodeValue, 1);
 
-        $nameQuery = "//*[@ID='$id']//saml:Assertion" . $assertionXpath;
+        // A Blank URI attribute indicates the whole document is signed.
+        if (empty($id)) {
+            $signedNode = "";
+        } else {
+            $signedNode = "//*[@ID='$id']";
+        }
+
+        $nameQuery = "{$signedNode}//saml:Assertion" . $assertionXpath;
         return $xpath->query($nameQuery);
     }
 }
