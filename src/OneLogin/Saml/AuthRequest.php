@@ -34,6 +34,16 @@ class OneLogin_Saml_AuthRequest
     {
         $id = $this->_generateUniqueID();
         $issueInstant = $this->_getTimestamp();
+
+        if ($this->_settings->requestedNameIdFormat) {
+           $nameIdRequest = <<<REQUEST
+             <samlp:NameIDPolicy
+                 Format="{$this->_settings->requestedNameIdFormat}"
+                 AllowCreate="true"></samlp:NameIDPolicy>
+REQUEST;
+        } else {
+           $nameIdRequest = "";
+        }
         
         $request = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -45,9 +55,7 @@ class OneLogin_Saml_AuthRequest
     ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     AssertionConsumerServiceURL="{$this->_settings->spReturnUrl}">
     <saml:Issuer>{$this->_settings->spIssuer}</saml:Issuer>
-    <samlp:NameIDPolicy
-        Format="{$this->_settings->requestedNameIdFormat}"
-        AllowCreate="true"></samlp:NameIDPolicy>
+    $nameIdRequest
     <samlp:RequestedAuthnContext Comparison="exact">
         <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
     </samlp:RequestedAuthnContext>
