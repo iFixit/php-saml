@@ -381,7 +381,7 @@ class OneLogin_Saml2_Settings
      */
     public function checkSettings($settings)
     {
-        assert('is_array($settings)');
+        assert(is_array($settings));
 
         if (!is_array($settings) || empty($settings)) {
             $errors = array('invalid_syntax');
@@ -407,7 +407,7 @@ class OneLogin_Saml2_Settings
      */
     public function checkIdPSettings($settings)
     {
-        assert('is_array($settings)');
+        assert(is_array($settings));
 
         if (!is_array($settings) || empty($settings)) {
             return array('invalid_syntax');
@@ -471,7 +471,7 @@ class OneLogin_Saml2_Settings
      */
     public function checkSPSettings($settings)
     {
-        assert('is_array($settings)');
+        assert(is_array($settings));
 
         if (!is_array($settings) || empty($settings)) {
             return array('invalid_syntax');
@@ -755,7 +755,7 @@ class OneLogin_Saml2_Settings
      */
     public function validateMetadata($xml)
     {
-        assert('is_string($xml)');
+        assert(is_string($xml));
 
         $errors = array();
         $res = OneLogin_Saml2_Utils::validateXML($xml, 'saml-schema-metadata-2.0.xsd', $this->_debug);
@@ -835,7 +835,7 @@ class OneLogin_Saml2_Settings
      */
     public function setStrict($value)
     {
-        assert('is_bool($value)');
+        assert(is_bool($value));
 
         $this->_strict = $value;
     }
